@@ -245,17 +245,16 @@
     document.getElementById("homePage").classList.add("active");
   }
 
-  
-  window.addEventListener("load", () => {
-    music.play()
-      .then(() => {
-        playing = true;
-        playBtn.textContent = "⏸ Pause";
-      })
-      .catch(() => {
-        playBtn.textContent = "▶ Play";
-      });
-  });
+  function startMusicOnce() {
+    music.play();
+    playing = true;
+    playBtn.textContent = "⏸ Pause";
+    document.removeEventListener("click", startMusicOnce);
+    document.removeEventListener("touchstart", startMusicOnce);
+  }
+
+  document.addEventListener("click", startMusicOnce);
+  document.addEventListener("touchstart", startMusicOnce);
 </script>
 
 </body>
