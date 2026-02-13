@@ -106,7 +106,6 @@
       color: #777;
     }
 
-
     .now-playing {
       margin-bottom: 20px;
       padding: 10px;
@@ -115,19 +114,16 @@
       font-size: 0.8rem;
     }
 
-    
     .volume-label {
       font-size: 0.8rem;
       margin: 10px 0 4px;
     }
-
   </style>
 </head>
 <body>
 
 <div class="container">
 
-  
   <div id="homePage" class="page active">
     <h1>Open When You Need It 🤍</h1>
     <p>
@@ -136,16 +132,13 @@
       Open it whenever you need a little comfort.
     </p>
 
-    
     <audio id="bgMusic"></audio>
 
-   
     <div class="music-controls">
       <button class="music-btn" onclick="toggleMusic()">▶ Play</button>
       <button class="music-btn" onclick="nextSong()">⏭ Next</button>
     </div>
 
-    
     <p class="volume-label">Volume</p>
     <input
       class="volume"
@@ -157,13 +150,11 @@
       onchange="changeVolume(this.value)"
     >
 
-    
     <div class="now-playing">
       <strong>Now Playing:</strong><br>
       <span id="songTitle"></span>
     </div>
 
-    
     <div class="buttons">
       <button class="open-btn" onclick="openNote('tired')">Open when you're tired</button>
       <button class="open-btn" onclick="openNote('stressed')">Open when you're stressed</button>
@@ -177,7 +168,6 @@
     </footer>
   </div>
 
-  
   <div id="notePage" class="page">
     <h1>🤍</h1>
     <div id="noteContent" class="paper"></div>
@@ -187,8 +177,6 @@
 </div>
 
 <script>
- 
-
   const playlist = [
     { file: "Keshi - Understand.mp3", title: "Keshi - Understand" },
     { file: "Juan Karlos - Through the years.mp3", title: "Juan Karlos - Through the years" },
@@ -202,15 +190,13 @@
   const playBtn = document.querySelector(".music-btn");
   const songTitle = document.getElementById("songTitle");
 
-  
   music.src = playlist[currentSong].file;
   music.volume = 0.4;
   songTitle.textContent = playlist[currentSong].title;
 
   music.addEventListener("ended", () => {
-  nextSong();
-});
-
+    nextSong();
+  });
 
   function toggleMusic() {
     if (!playing) {
@@ -237,7 +223,6 @@
     music.volume = value;
   }
 
-  
   const notes = {
     tired: { text: "You’ve done more than enough today.\n\nRest is not weakness — it’s how strong people keep going, Rest Reset and Keep Going Never Give Up!.", color: "#fffaf0" },
     stressed: { text: "You don’t have to carry everything alone.\n\nI may not say it often, but I’m always here to listen and support you.", color: "#f0f9ff" },
@@ -260,6 +245,17 @@
     document.getElementById("homePage").classList.add("active");
   }
 
+  
+  window.addEventListener("load", () => {
+    music.play()
+      .then(() => {
+        playing = true;
+        playBtn.textContent = "⏸ Pause";
+      })
+      .catch(() => {
+        playBtn.textContent = "▶ Play";
+      });
+  });
 </script>
 
 </body>
