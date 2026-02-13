@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Open When You Need It 🤍</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #fff1f5, #fce7f3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+
+    h1 {
+      color: #e25588;
+    }
+
+    button {
+      padding: 10px 16px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .music-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .music-btn {
+      background: #fde2e4;
+    }
+
+    .volume {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .buttons {
+      display: grid;
+      gap: 12px;
+    }
+
+    .open-btn {
+      background: #f9c6d3;
+    }
+
+    .open-btn:hover {
+      background: #f7a8bf;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .active {
+      display: block;
+    }
+
+    .paper {
+      padding: 25px;
+      border-radius: 10px;
+      font-family: 'Georgia', serif;
+      line-height: 1.6;
+      margin-top: 15px;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fadeInPaper 0.8s ease forwards;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+    }
+
+    @keyframes fadeInPaper {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .home-btn {
+      margin-top: 20px;
+      background: #fde2e4;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: #777;
+    }
+
+
+    .now-playing {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 12px;
+      background: #fff0f5;
+      font-size: 0.8rem;
+    }
+
+    
+    .volume-label {
+      font-size: 0.8rem;
+      margin: 10px 0 4px;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  
+  <div id="homePage" class="page active">
+    <h1>Open When You Need It 🤍</h1>
+    <p>
+      Hi Ate,<br>
+      I made this for you.<br>
+      Open it whenever you need a little comfort.
+    </p>
+
+    
+    <audio id="bgMusic"></audio>
+
+   
+    <div class="music-controls">
+      <button class="music-btn" onclick="toggleMusic()">▶ Play</button>
+      <button class="music-btn" onclick="nextSong()">⏭ Next</button>
+    </div>
+
+    
+    <p class="volume-label">Volume</p>
+    <input
+      class="volume"
+      type="range"
+      min="0"
+      max="1"
+      step="0.01"
+      value="0.4"
+      onchange="changeVolume(this.value)"
+    >
+
+    
+    <div class="now-playing">
+      <strong>Now Playing:</strong><br>
+      <span id="songTitle"></span>
+    </div>
+
+    
+    <div class="buttons">
+      <button class="open-btn" onclick="openNote('tired')">Open when you're tired</button>
+      <button class="open-btn" onclick="openNote('stressed')">Open when you're stressed</button>
+      <button class="open-btn" onclick="openNote('doubt')">Open when you doubt yourself</button>
+      <button class="open-btn" onclick="openNote('smile')">Open when you need a smile</button>
+      <button class="open-btn" onclick="openNote('unappreciated')">Open when you feel unappreciated</button>
+    </div>
+
+    <footer>
+      Happy Valentine’s Day 💕
+    </footer>
+  </div>
+
+  
+  <div id="notePage" class="page">
+    <h1>🤍</h1>
+    <div id="noteContent" class="paper"></div>
+    <button class="home-btn" onclick="goHome()">← Home</button>
+  </div>
+
+</div>
+
+<script>
+ 
+
+  const playlist = [
+    { file: "Keshi - Understand.mp3", title: "Keshi - Understand" },
+    { file: "Juan Karlos - Through the years.mp3", title: "Juan Karlos - Through the years" },
+    { file: "Yuuri - Merry go round.mp3", title: "Yuuri - Merry go round" },
+    { file: "Ichiban no Takaramono - Fingerstyle.mp3", title: "Ichiban no Takaramono" }
+  ];
+
+  let currentSong = 0;
+  let playing = false;
+  const music = document.getElementById("bgMusic");
+  const playBtn = document.querySelector(".music-btn");
+  const songTitle = document.getElementById("songTitle");
+
+  
+  music.src = playlist[currentSong].file;
+  music.volume = 0.4;
+  songTitle.textContent = playlist[currentSong].title;
+
+  music.addEventListener("ended", () => {
+  nextSong();
+});
+
+
+  function toggleMusic() {
+    if (!playing) {
+      music.play();
+      playBtn.textContent = "⏸ Pause";
+    } else {
+      music.pause();
+      playBtn.textContent = "▶ Play";
+    }
+    playing = !playing;
+  }
+
+  function nextSong() {
+    music.pause();
+    currentSong = (currentSong + 1) % playlist.length;
+    music.src = playlist[currentSong].file;
+    songTitle.textContent = playlist[currentSong].title;
+    music.play();
+    playing = true;
+    playBtn.textContent = "⏸ Pause";
+  }
+
+  function changeVolume(value) {
+    music.volume = value;
+  }
+
+  
+  const notes = {
+    tired: { text: "You’ve done more than enough today.\n\nRest is not weakness — it’s how strong people keep going, Rest Reset and Keep Going Never Give Up!.", color: "#fffaf0" },
+    stressed: { text: "You don’t have to carry everything alone.\n\nI may not say it often, but I’m always here to listen and support you.", color: "#f0f9ff" },
+    doubt: { text: "You’ve handled harder days than this.\n\nThis moment will not define you.\nI believe in you and i know you can do it Ate!.", color: "#fdf4ff" },
+    smile: { text: "Thank you for being my Ate.\n\nI’m luckier than I probably show and i appreciate you alot.", color: "#f0fdf4" },
+    unappreciated: { text: "I see what you do.\n\nEven when no one says it i know your a Kind and Hardworking person with a warm personality.", color: "#fff1f2" }
+  };
+
+  function openNote(type) {
+    const paper = document.getElementById("noteContent");
+    paper.textContent = notes[type].text;
+    paper.style.background = notes[type].color;
+
+    document.getElementById("homePage").classList.remove("active");
+    document.getElementById("notePage").classList.add("active");
+  }
+
+  function goHome() {
+    document.getElementById("notePage").classList.remove("active");
+    document.getElementById("homePage").classList.add("active");
+  }
+
+</script>
+
+</body>
+</html>
